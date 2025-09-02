@@ -40,8 +40,8 @@
 #Search feature: by title or genre.
 #Late fee system: calculate fee if not returned on time.
 #Ratings system: customers rate videos.
-
 #Collections: Use a dict for quick lookups (e.g. video_id -> Video).
+
 #Day 7: Presentation & Review
 #Groups demo renting/returning videos.
 #Discuss use of OOP + collections.
