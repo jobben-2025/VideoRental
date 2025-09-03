@@ -87,13 +87,75 @@ class VideoStore():
 
 
 ######################### FUNCTIONS #########################
-def main_menu():
+def first_add_video():
     pass
 
 
+def second_add_customer():
+        pass
 
 
+def third_customer_rent_video():
+        pass
 
+
+def fourth_customer_return_video():
+        pass
+
+
+def fifth_show_avail_videos():
+        pass
+
+
+def sixth_show_rented_videos():
+        pass
+
+
+def main_menu():
+    try:
+        print("")
+        print("Welcome to Video Rental Store (VRS)")
+        print("")
+        print("1. Add a video to system")
+        print("2. Add a customer to system")
+        print("3. Customer rent-a-video")
+        print("4. Customer return-video")
+        print("5. Show 'available' videos")           #display only videos,  not rented out; search via 'title' 
+        print("6. Show rented videos by customer")
+        print("")
+        print("7. Exit program")
+        print("")
+        
+        menu_selection = input(f"Please choose menu option to proceed: ")
+        try:
+            menu_selection = int(menu_selection)
+            selection = True
+        except:
+            TypeError
+        if selection == True:
+            menu_selection = int(menu_selection)
+        if menu_selection == 1:
+            first_add_video()
+        elif menu_selection == 2:
+            second_add_customer()
+        elif menu_selection == 3:
+            third_customer_rent_video()
+        elif menu_selection == 4:
+            fourth_customer_return_video()
+        elif menu_selection == 5:
+            fifth_show_avail_videos()
+        elif menu_selection == 6:
+            sixth_show_rented_videos()
+        elif menu_selection == 7:
+            confirmation = input("Are you sure you want to exit program? (y/n)")
+            if confirmation == "y":
+                 return
+        else:
+            print("Please enter a number 1-7!")    
+
+    except:
+        ValueError
+    main_menu()
 
     
 ######################### Operational code and function calls from here: #########################
