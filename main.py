@@ -52,6 +52,22 @@
 ######################### CLASSES #########################
 class video():
     pass
+def __init__(self, title, variety, year, available=True):
+    self.title = title
+    self.variety = variety
+    self.year = year
+    self.available = available
+
+def check_if_available(self):
+    return self.available
+
+def rent_video(self):
+    if self.available:
+        self.available = False
+        return f"{self.title} currently not available."
+    else:
+        return f"{self.title} is not in stock."
+
 
 class customer():
     pass
