@@ -50,14 +50,39 @@
 
 
 ######################### CLASSES #########################
-class video():
+class Video():
     pass
 
-class customer():
+class Customer():
     pass
 
-class videoStore():
-    pass
+
+
+    def add_customer(self, customer):
+        if not isinstance(customer, Customer):
+            raise TypeError("Only Customer instances can be added.")   #creation by 'Customer' class
+        self.customers.append(customer)
+
+class VideoStore():
+    def __init__(self, videos=None):
+        if videos == None:
+            videos = []
+        if not all(isinstance(video, Video) for video in videos):
+            raise TypeError("All elements must be instances of video.")
+        self.videos = videos    
+
+    def add_video(self, video):
+        if not isinstance(video, Video):
+            raise TypeError("Only Video instances can be added.")   #creation by 'Video' class
+        self.videos.append(video)
+
+    
+
+
+
+
+
+
 
 
 
