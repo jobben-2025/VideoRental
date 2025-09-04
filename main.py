@@ -94,34 +94,100 @@ class Video():
      return f"{self.title} ({self.year}) - {'Available' if self.available else 'Not Available'}"
 
 
-class Customer():
-    pass
 
 
+class Customer:
+    def __init__(self, customer_id: str, name: str):
+        # unique identifier for the customer
+        self.customer_id = customer_id
+        # customer's full name
+        self.name = name
+        # list of video IDs currently rented by this customer
+        self.rented_videos = []
 
-    def add_customer(self, customer):
-        if not isinstance(customer, Customer):
-            raise TypeError("Only Customer instances can be added.")   #creation by 'Customer' class
-        self.customers.append(customer)
+    def rent(self, video_id: str):
+        """Add a video to the list of rented videos."""
+        if video_id not in self.rented_videos:
+            self.rented_videos.append(video_id)
 
-class VideoStore():
-    def __init__(self, videos=None):
-        if videos == None:
-            videos = []
-        if not all(isinstance(video, Video) for video in videos):
-            raise TypeError("All elements must be instances of video.")
-        self.videos = videos    
+    def return_video(self, video_id: str):
+        """Remove a video from the list of rented videos."""
+        if video_id in self.rented_videos:
+            self.rented_videos.remove(video_id)
+
+    def __str__(self):
+        """Return a human-readable summary of the customer."""
+        return f"Customer[{self.customer_id}]: {self.name}, rented={self.rented_videos}"
+
+
+class VideoStore:
+    def __init__(self, videos=None, customers=None):
+        # keep lists for now to match your current structure
+        self.videos = videos if videos is not None else []
+        self.customers = customers if customers is not None else []
+
+        # basic type safety
+        if not all(isinstance(v, Video) for v in self.videos):
+            raise TypeError("All elements of 'videos' must be instances of Video.")
+        if not all(isinstance(c, Customer) for c in self.customers):
+            raise TypeError("All elements of 'customers' must be instances of Customer.")
 
     def add_video(self, video):
         if not isinstance(video, Video):
-            raise TypeError("Only Video instances can be added.")   #creation by 'Video' class
+            raise TypeError("Only Video instances can be added.")
         self.videos.append(video)
 
-    
+    def add_customer(self, customer):
+        if not isinstance(customer, Customer):
+            raise TypeError("Only Customer instances can be added.")
+        self.customers.append(customer)
 
+#rent
+def rent_video(self, customer_id: str, video_id: str) -> bool:
+        """
+        Rent a video to a customer if the video exists, the customer exists,
+        and the video is currently available.
 
+        Returns:
+            True if the rental succeeds, otherwise False.
+        """
+        customer = self._find_customer(customer_id)
+        video = self._find_video(video_id)
 
+        if customer is None or video is None:
+            return False  # invalid IDs
 
+        if not getattr(video, "available", False):
+            return False  # already rented
+
+        # perform rental
+        video.available = False
+        customer.rent(video_id)
+        return True
+#return
+    def return_video(self, customer_id: str, video_id: str) -> bool:
+        """
+        Return a rented video from a customer if:
+        - customer exists,
+        - video exists,
+        - customer actually has this video rented.
+
+        Returns:
+            True if the return succeeds, otherwise False.
+        """
+        customer = self._find_customer(customer_id)
+        video = self._find_video(video_id)
+
+        if customer is None or video is None:
+            return False  # invalid IDs
+
+        if video_id not in customer.rented_videos:
+            return False  # customer didn't rent this video
+
+        # perform return
+        video.available = True
+        customer.return_video(video_id)
+        return True
 
 
 
