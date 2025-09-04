@@ -50,8 +50,50 @@
 
 
 ######################### CLASSES #########################
-class Video:
-    pass
+class Video():
+    video_list = []
+    def __init__(self, title, variety, year, available=True):
+        self.title = title
+        self.variety = variety
+        self.year = year
+        self.available = available
+        Video.video_list.append(self)
+
+    def borrow_video(self, customer):
+        if self.available:
+            self.available = False
+            customer.rented_videos.append(self)
+            return f"You have borrowed '{self.title}'."
+        else:
+            return f"'{self.title}' is currently not available."
+        
+    def return_video(self):
+        if not self.available:
+                self.available = True
+                return f"You have returned '{self.title}'."
+        else:
+                return f"'{self.title}' was not borrowed."    
+        
+            
+    def check_availability(self):
+     if self.available:
+           self.available = False
+           return f"{self.title} is currently not available."
+     else:
+         return f"{self.title} is not in stock."
+
+    @classmethod
+    def display_videos(cls):
+         if not cls.video_list:
+            print("No videos in the list.")
+         else:
+            for video in cls.video_list:
+               print(f"{video.title} ({video.year}) - Available: {video.available}")
+
+    def __str__(self):
+     return f"{self.title} ({self.year}) - {'Available' if self.available else 'Not Available'}"
+
+
 
 
 class Customer:
@@ -223,7 +265,7 @@ def main_menu():
     main_menu()
 
     
-######################### 1 Operational code and function calls from here:  #########################
+######################### Operational code and function calls from here:  #########################
 main_menu()
 
 
