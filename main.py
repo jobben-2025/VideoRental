@@ -100,7 +100,52 @@ class VideoStore:
             raise TypeError("Only Customer instances can be added.")
         self.customers.append(customer)
 
+#rent
+def rent_video(self, customer_id: str, video_id: str) -> bool:
+        """
+        Rent a video to a customer if the video exists, the customer exists,
+        and the video is currently available.
 
+        Returns:
+            True if the rental succeeds, otherwise False.
+        """
+        customer = self._find_customer(customer_id)
+        video = self._find_video(video_id)
+
+        if customer is None or video is None:
+            return False  # invalid IDs
+
+        if not getattr(video, "available", False):
+            return False  # already rented
+
+        # perform rental
+        video.available = False
+        customer.rent(video_id)
+        return True
+#return
+    def return_video(self, customer_id: str, video_id: str) -> bool:
+        """
+        Return a rented video from a customer if:
+        - customer exists,
+        - video exists,
+        - customer actually has this video rented.
+
+        Returns:
+            True if the return succeeds, otherwise False.
+        """
+        customer = self._find_customer(customer_id)
+        video = self._find_video(video_id)
+
+        if customer is None or video is None:
+            return False  # invalid IDs
+
+        if video_id not in customer.rented_videos:
+            return False  # customer didn't rent this video
+
+        # perform return
+        video.available = True
+        customer.return_video(video_id)
+        return True
 
 
 
