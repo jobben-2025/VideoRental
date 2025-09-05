@@ -22,8 +22,8 @@
 #🗓️ Weekly Breakdown
 
 #Day 1: Define Classes
-#Video: attributes → title, genre, video_id, available (bool).
-#Customer: attributes → name, customer_id, rented_videos (list).
+#Video: attributes → title, genre, video_id, available (bool).                              
+#Customer: attributes → name, customer_id, rented_videos (list).                            
 #VideoStore: manages collections of videos and customers.
 
 #Day 1–3: Implement Core Functions
@@ -59,6 +59,9 @@ class Video():
         self.available = available
         Video.video_list.append(self)
 
+    def __str__(self):
+     return f"{self.title} ({self.year}) - {'Available' if self.available else 'Not Available'}"
+
     def borrow_video(self, customer):
         if self.available:
             self.available = False
@@ -89,10 +92,6 @@ class Video():
          else:
             for video in cls.video_list:
                print(f"{video.title} ({video.year}) - Available: {video.available}")
-
-    def __str__(self):
-     return f"{self.title} ({self.year}) - {'Available' if self.available else 'Not Available'}"
-
 
 
 
@@ -143,7 +142,7 @@ class VideoStore:
         self.customers.append(customer)
 
 #rent
-def rent_video(self, customer_id: str, video_id: str) -> bool:
+    def rent_video(self, customer_id: str, video_id: str) -> bool:
         """
         Rent a video to a customer if the video exists, the customer exists,
         and the video is currently available.
@@ -194,28 +193,75 @@ def rent_video(self, customer_id: str, video_id: str) -> bool:
 
 
 ######################### FUNCTIONS #########################
+global VideoCollection1                 #holds videos, customer data of VideoStore class
+VideoCollection1 = VideoStore();
+
+
 def first_add_video():
-    pass
+    print("")
+    print("1. Add a video to system")
+    print("")
+    print("Please enter the details of the video below.")
+    global VideoCollection1
+    new_title = input("Title: ")
+    new_variety = input("Variety: ")
+    new_year = input("Year: ")
+    VideoCollection1.add_video(Video(new_title, new_variety, new_year));
+    print("")
+
+    input_reg = input("Do you want to enter another video? (y/n)")
+    if input_reg == "y":
+        first_add_video()
+    else:
+        main_menu()
+    
 
 
 def second_add_customer():
-        pass
+    print("")
+    print("2. Add a customer to system")
+    print("")
+    print("Please enter the details of the customer below.")
+    global VideoCollection1
+    new_customer_id = input("Customer ID: ")
+    new_customer_name = input("Name: ")
+    VideoCollection1.add_customer(Customer(new_customer_id, new_customer_name));
+    print("")
+
+    input_reg = input("Do you want to enter another customer? (y/n)")
+    if input_reg == "y":
+        second_add_customer()
+    else:
+        main_menu()
+    
 
 
 def third_customer_rent_video():
-        pass
+        print("")
+        print("3. Customer rent-a-video")
+        print("")
+        
 
 
 def fourth_customer_return_video():
-        pass
+        print("")
+        print("4. Customer return-video")
+        print("")
+        
 
 
 def fifth_show_avail_videos():
-        pass
+        print("")
+        print("5. Show 'available' videos")           #display only videos,  not rented out; search via 'title' 
+        print("")
+        
 
 
 def sixth_show_rented_videos():
-        pass
+        print("")
+        print("6. Show rented videos by customer")
+        print("")
+
 
 
 def main_menu():
