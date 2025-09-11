@@ -52,32 +52,34 @@ class Video:
         self.genre = genre
         self.year = year
         self.available = available
+
         # <----- here I changed: removed any class-level lists because Inconsistency : VideoStore should be the single source of truth
+
 
     def __str__(self):
         return f"{self.video_id} | {self.title} ({self.year}) [{self.genre}] - {'Available' if self.available else 'Not Available'}"
 
+
     # <----- here I changed: make availability check side-effect free because Inconsistency : previous versions sometimes toggled state while 'checking'
+
     def check_availability(self) -> str:
         return f"{self.title} is {'available' if self.available else 'not available'}."
 
 
 class Customer:
     def __init__(self, customer_id: str, name: str):
-        # unique identifier for the customer
         self.customer_id = customer_id
-        # customer's full name
         self.name = name
+
         # list of video IDs currently rented by this customer (store video_ids as strings)
         self.rented_videos = []
 
+
     def rent(self, video_id: str):
-        """Add a video id to the list of rented videos."""
         if video_id not in self.rented_videos:
             self.rented_videos.append(video_id)
 
     def return_video(self, video_id: str):
-        """Remove a video id from the list of rented videos."""
         if video_id in self.rented_videos:
             self.rented_videos.remove(video_id)
 
@@ -94,7 +96,9 @@ class VideoStore:
         self.videos = videos if videos is not None else []
         self.customers = customers if customers is not None else []
 
+
         # type safety
+
         if not all(isinstance(v, Video) for v in self.videos):
             raise TypeError("All elements of 'videos' must be instances of Video.")
         if not all(isinstance(c, Customer) for c in self.customers):
@@ -103,7 +107,9 @@ class VideoStore:
     def add_video(self, video):
         if not isinstance(video, Video):
             raise TypeError("Only Video instances can be added.")
+
         # prevent duplicate IDs (critical for reliable lookups)
+
         if any(v.video_id == video.video_id for v in self.videos):
             raise ValueError(f"Video ID '{video.video_id}' already exists.")
         self.videos.append(video)
@@ -111,7 +117,9 @@ class VideoStore:
     def add_customer(self, customer):
         if not isinstance(customer, Customer):
             raise TypeError("Only Customer instances can be added.")
+
         # prevent duplicate customer IDs
+
         if any(c.customer_id == customer.customer_id for c in self.customers):
             raise ValueError(f"Customer ID '{customer.customer_id}' already exists.")
         self.customers.append(customer)
@@ -131,25 +139,33 @@ class VideoStore:
 
     # --- core actions ---
     def rent_video(self, customer_id: str, video_id: str) -> bool:
+
         """Customer rents if video exists, customer exists, and video is available."""
+
         customer = self._find_customer(customer_id)
         video = self._find_video(video_id)
         if customer is None or video is None:
-            return False  # invalid IDs
+            return False
         if not video.available:
+
             return False  # already rented
+
         video.available = False
         customer.rent(video_id)
         return True
 
     def return_video(self, customer_id: str, video_id: str) -> bool:
+
         """Customer returns a video if both exist and the customer has it."""
+
         customer = self._find_customer(customer_id)
         video = self._find_video(video_id)
         if customer is None or video is None:
-            return False  # invalid IDs
+            return False
         if video_id not in customer.rented_videos:
+
             return False  # customer didn't rent this video
+
         video.available = True
         customer.return_video(video_id)
         return True
@@ -162,7 +178,6 @@ class VideoStore:
         customer = self._find_customer(customer_id)
         if customer is None:
             return []
-        # map video_ids to Video objects (if still present)
         id_set = set(customer.rented_videos)
         return [v for v in self.videos if v.video_id in id_set]
 
@@ -455,6 +470,7 @@ def main_menu():
         try:
             choice = int(choice_raw)
         except ValueError:
+
             print("Please enter a number 1-8!")
             continue
 
@@ -479,6 +495,7 @@ def main_menu():
                 return
         else:
             print("Please enter a number 1-8!")
+
 
 
 ######################### ENTRYPOINT #########################
