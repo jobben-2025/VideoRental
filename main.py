@@ -10,6 +10,39 @@
 # Functions: rent, return, search, list
 # Collections: use of dict and list for efficient management
 
+# 🎯 Learning Objectives
+# By the end of this project, students will be able to:
+# Apply Object-Oriented Programming (OOP) principles by creating and using classes (Video, Customer, VideoStore).
+# Encapsulate functionality inside methods (e.g., rent, return, search, list).
+# Use Python collections (list, dict) to store and retrieve structured data efficiently.
+# Implement control flow with conditions and loops to manage system operations.
+# Design modular code by splitting responsibilities across classes and functions.
+# Collaborate in groups, practice version control (if used), and present solutions.
+
+# 🗓️ Weekly Breakdown
+# Day 1: Define Classes
+#   Video: attributes → title, genre, video_id, available (bool).
+#   Customer: attributes → name, customer_id, rented_videos (list).
+#   VideoStore: manages collections of videos and customers.
+# Day 1–3: Implement Core Functions
+#   In the VideoStore class:
+#   add_video(video) – add a new movie.
+#   add_customer(customer) – register a new customer.
+#   rent_video(customer_id, video_id) – customer rents if available.
+#   return_video(customer_id, video_id) – customer returns a video.
+#   list_available_videos() – show available movies.
+#   list_customer_videos(customer_id) – show what a customer has rented.
+# Day 3–6: Extensions (Group Work)
+#   Encourage groups to add one or two enhancements:
+#   Search feature: by title or genre.
+#   Late fee system: calculate fee if not returned on time.
+#   Ratings system: customers rate videos.
+#   Collections: Use a dict for quick lookups (e.g. video_id -> Video).
+# Day 7: Presentation & Review
+#   Groups demo renting/returning videos.
+#   Discuss use of OOP + collections.
+#   Compare different extensions.
+
 
 ######################### CLASSES #########################
 class Video:
@@ -19,10 +52,12 @@ class Video:
         self.genre = genre
         self.year = year
         self.available = available
+        # <----- here I changed: removed any class-level lists because Inconsistency : VideoStore should be the single source of truth
 
     def __str__(self):
         return f"{self.video_id} | {self.title} ({self.year}) [{self.genre}] - {'Available' if self.available else 'Not Available'}"
 
+    # <----- here I changed: make availability check side-effect free because Inconsistency : previous versions sometimes toggled state while 'checking'
     def check_availability(self) -> str:
         return f"{self.title} is {'available' if self.available else 'not available'}."
 
@@ -100,9 +135,9 @@ class VideoStore:
         customer = self._find_customer(customer_id)
         video = self._find_video(video_id)
         if customer is None or video is None:
-            return False
+            return False  # invalid IDs
         if not video.available:
-            return False
+            return False  # already rented
         video.available = False
         customer.rent(video_id)
         return True
@@ -112,9 +147,9 @@ class VideoStore:
         customer = self._find_customer(customer_id)
         video = self._find_video(video_id)
         if customer is None or video is None:
-            return False
+            return False  # invalid IDs
         if video_id not in customer.rented_videos:
-            return False
+            return False  # customer didn't rent this video
         video.available = True
         customer.return_video(video_id)
         return True
@@ -127,8 +162,9 @@ class VideoStore:
         customer = self._find_customer(customer_id)
         if customer is None:
             return []
-        ids = set(customer.rented_videos)
-        return [v for v in self.videos if v.video_id in ids]
+        # map video_ids to Video objects (if still present)
+        id_set = set(customer.rented_videos)
+        return [v for v in self.videos if v.video_id in id_set]
 
     # --- stretch: search ---
     def search(self, title: str = "", genre: str = ""):
@@ -212,7 +248,7 @@ def load_videos_from_file():
             try:
                 year = int(year_str)
             except ValueError:
-                # If year isn't a number, default to 0 (or skip).
+                # If year isn't a number, default to 0.
                 year = 0
             videos.append(Video(video_id, title, genre, year, available=True))
     return videos
@@ -276,7 +312,7 @@ def first_add_video():
     try:
         new_video = Video(new_video_id, title, genre, year, available=True)
         VideoCollection1.add_video(new_video)
-        save_video_to_file(new_video)  # persist to file so the catalog survives restarts
+        save_video_to_file(new_video)  # persist so the catalog survives restarts
         print("✅ Video added and saved to videostore.txt.")
     except (TypeError, ValueError) as e:
         print(f"❌ {e}")
@@ -298,7 +334,7 @@ def second_add_customer():
     try:
         new_customer = Customer(new_customer_id, new_customer_name)
         VideoCollection1.add_customer(new_customer)
-        save_customer_to_file(new_customer)  # persist to file so customers survive restarts
+        save_customer_to_file(new_customer)  # persist so customers survive restarts
         print("✅ Customer added and saved to customers.txt.")
     except (TypeError, ValueError) as e:
         print(f"❌ {e}")
@@ -321,7 +357,7 @@ def third_customer_rent_video():
     if ok:
         print("🎬 Rented successfully.")
     else:
-        # Give a helpful reason if we can deduce it
+        # helpful explanation
         customer = VideoCollection1._find_customer(cid)
         video = VideoCollection1._find_video(vid)
         if customer is None:
