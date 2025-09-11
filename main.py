@@ -33,7 +33,7 @@ class Customer:
         self.customer_id = customer_id
         # customer's full name
         self.name = name
-        # list of video IDs currently rented by this customer
+        # list of video IDs currently rented by this customer (store video_ids as strings)
         self.rented_videos = []
 
     def rent(self, video_id: str):
@@ -59,6 +59,7 @@ class VideoStore:
         self.videos = videos if videos is not None else []
         self.customers = customers if customers is not None else []
 
+        # type safety
         if not all(isinstance(v, Video) for v in self.videos):
             raise TypeError("All elements of 'videos' must be instances of Video.")
         if not all(isinstance(c, Customer) for c in self.customers):
@@ -67,6 +68,7 @@ class VideoStore:
     def add_video(self, video):
         if not isinstance(video, Video):
             raise TypeError("Only Video instances can be added.")
+        # prevent duplicate IDs (critical for reliable lookups)
         if any(v.video_id == video.video_id for v in self.videos):
             raise ValueError(f"Video ID '{video.video_id}' already exists.")
         self.videos.append(video)
@@ -74,6 +76,7 @@ class VideoStore:
     def add_customer(self, customer):
         if not isinstance(customer, Customer):
             raise TypeError("Only Customer instances can be added.")
+        # prevent duplicate customer IDs
         if any(c.customer_id == customer.customer_id for c in self.customers):
             raise ValueError(f"Customer ID '{customer.customer_id}' already exists.")
         self.customers.append(customer)
@@ -141,8 +144,108 @@ class VideoStore:
         return results
 
 
+#######################################################################
+###### Code Text File Save  ###########################################
+#######################################################################
+# This section implements a very simple, human-readable persistence.
+# We use two plain text files: one for videos, one for customers.
+# Each new item is appended as a single line using a stable delimiter ("|").
+#
+# Why only the catalog (videos/customers) in files?
+# - It avoids complex synchronization problems for rentals/availability.
+# - Rentals (who has what) and availability are dynamic and change often.
+# - Keeping those in memory ensures the "business logic" is the single source of truth.
+#
+# File formats:
+#   videostore.txt   ->  video_id|title|genre|year
+#   customers.txt    ->  customer_id|name
+#
+# On startup:
+#   - We load both files (if they exist) and build the initial store lists.
+# When adding:
+#   - We append the new video/customer to the corresponding file.
+#
+# Note:
+#   - If two teammates add lines in parallel and push via Git, merges may be required.
+#   - For a small project this is fine; for bigger systems use JSON/SQLite later.
+import os
+
+VIDEO_FILE = "videostore.txt"
+CUSTOMER_FILE = "customers.txt"
+
+def save_video_to_file(video: Video):
+    """
+    Append a single video to videostore.txt in the format:
+      video_id|title|genre|year
+    We intentionally do NOT store 'available' here to keep files as a pure catalog.
+    """
+    line = f"{video.video_id}|{video.title}|{video.genre}|{video.year}\n"
+    with open(VIDEO_FILE, "a", encoding="utf-8") as f:
+        f.write(line)
+
+def save_customer_to_file(customer: Customer):
+    """
+    Append a single customer to customers.txt in the format:
+      customer_id|name
+    """
+    line = f"{customer.customer_id}|{customer.name}\n"
+    with open(CUSTOMER_FILE, "a", encoding="utf-8") as f:
+        f.write(line)
+
+def load_videos_from_file():
+    """
+    Read all videos from videostore.txt and return a list[Video].
+    If the file doesn't exist yet, return an empty list.
+    All loaded videos start as available=True (catalog only).
+    """
+    videos = []
+    if not os.path.exists(VIDEO_FILE):
+        return videos
+
+    with open(VIDEO_FILE, "r", encoding="utf-8") as f:
+        for line in f:
+            parts = line.strip().split("|")
+            if len(parts) != 4:
+                # Skip malformed lines rather than crashing.
+                continue
+            video_id, title, genre, year_str = parts
+            try:
+                year = int(year_str)
+            except ValueError:
+                # If year isn't a number, default to 0 (or skip).
+                year = 0
+            videos.append(Video(video_id, title, genre, year, available=True))
+    return videos
+
+def load_customers_from_file():
+    """
+    Read all customers from customers.txt and return a list[Customer].
+    If the file doesn't exist yet, return an empty list.
+    """
+    customers = []
+    if not os.path.exists(CUSTOMER_FILE):
+        return customers
+
+    with open(CUSTOMER_FILE, "r", encoding="utf-8") as f:
+        for line in f:
+            parts = line.strip().split("|")
+            if len(parts) != 2:
+                continue
+            customer_id, name = parts
+            customers.append(Customer(customer_id, name))
+    return customers
+#######################################################################
+###### End of Code Text File Save #####################################
+#######################################################################
+
+
 ######################### FUNCTIONS (CLI) #########################
-VideoCollection1 = VideoStore()
+# Initialize the store by loading from files (if present).
+# We pass the loaded lists into VideoStore so the app starts with existing data.
+VideoCollection1 = VideoStore(
+    videos=load_videos_from_file(),
+    customers=load_customers_from_file()
+)
 
 def first_add_video():
     print("\n1. Add a video to system\n")
@@ -171,8 +274,10 @@ def first_add_video():
         return
 
     try:
-        VideoCollection1.add_video(Video(new_video_id, title, genre, year, available=True))
-        print("✅ Video added.")
+        new_video = Video(new_video_id, title, genre, year, available=True)
+        VideoCollection1.add_video(new_video)
+        save_video_to_file(new_video)  # persist to file so the catalog survives restarts
+        print("✅ Video added and saved to videostore.txt.")
     except (TypeError, ValueError) as e:
         print(f"❌ {e}")
 
@@ -191,8 +296,10 @@ def second_add_customer():
         return
 
     try:
-        VideoCollection1.add_customer(Customer(new_customer_id, new_customer_name))
-        print("✅ Customer added.")
+        new_customer = Customer(new_customer_id, new_customer_name)
+        VideoCollection1.add_customer(new_customer)
+        save_customer_to_file(new_customer)  # persist to file so customers survive restarts
+        print("✅ Customer added and saved to customers.txt.")
     except (TypeError, ValueError) as e:
         print(f"❌ {e}")
 
@@ -214,6 +321,7 @@ def third_customer_rent_video():
     if ok:
         print("🎬 Rented successfully.")
     else:
+        # Give a helpful reason if we can deduce it
         customer = VideoCollection1._find_customer(cid)
         video = VideoCollection1._find_video(vid)
         if customer is None:
@@ -337,20 +445,8 @@ def main_menu():
             print("Please enter a number 1-8!")
 
 
-######################### DEMO SEED & ENTRYPOINT #########################
-def seed_demo_data():
-    """Optional: quick demo data for testing."""
-    try:
-        VideoCollection1.add_video(Video("V001", "The Matrix", "Sci-Fi", 1999))
-        VideoCollection1.add_video(Video("V002", "Amélie", "Romance", 2001))
-        VideoCollection1.add_video(Video("V003", "Inception", "Sci-Fi", 2010))
-        VideoCollection1.add_customer(Customer("C001", "Alice Example"))
-        VideoCollection1.add_customer(Customer("C002", "Bob Sample"))
-    except Exception:
-        # ignore duplicates if re-run
-        pass
-
-
+######################### ENTRYPOINT #########################
 if __name__ == "__main__":
-    seed_demo_data()  # comment out if you want a blank start
+    # We load from files on startup, so no seeding here.
+    # If the files don't exist yet, you'll start with an empty catalog.
     main_menu()
