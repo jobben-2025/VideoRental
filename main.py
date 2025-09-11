@@ -50,23 +50,75 @@
 
 
 ######################### CLASSES #########################
-class video():
-    pass
-def __init__(self, title, variety, year, available=True):
-    self.title = title
-    self.variety = variety
-    self.year = year
-    self.available = available
+class Video:
+    video_list = []
+    def __init__(self, title, variety, year, available=True):
+        self.title = title
+        self.variety = variety
+        self.year = year
+        self.available = available
+        Video.video_list.append(self)
 
-def check_if_available(self):
-    return self.available
+    def borrow_video(self, customer):
+        if self.available:
+            self.available = False
+            customer.rented_videos.append(self)
+            return f"You have borrowed '{self.title}'."
+        else:
+            return f"'{self.title}' is currently not available."
+        
+    def return_video(self):
+        if not self.available:
+                self.available = True
+                return f"You have returned '{self.title}'."
+        else:
+                return f"'{self.title}' was not borrowed."    
+        
+            
+    def check_availability(self):
+     if self.available:
+           self.available = False
+           return f"{self.title} is currently not available."
+     else:
+         return f"{self.title} is not in stock."
+   
+    check_availability
 
-def rent_video(self):
-    if self.available:
-        self.available = False
-        return f"{self.title} currently not available."
-    else:
-        return f"{self.title} is not in stock."
+    @classmethod
+    def display_videos(cls):
+         if not cls.video_list:
+            print("No videos in the list.")
+         else:
+            for video in cls.video_list:
+               print(f"{video.title} ({video.year}) - Available: {video.available}")
+
+
+    def __str__(self):
+     return f"{self.title} ({self.year}) - {'Available' if self.available else 'Not Available'}"
+   
+    display_videos
+
+    #####return video menu###
+
+    def return_video_menu():
+            print("=== Video Return Menu ===")
+            print("1. Return a Video")
+            print("2. View My Rentals")
+            print("3. Exit")
+   
+            choice = input("Please choose an option (1-3): ")
+            if choice == '1':
+                video_id = input("Enter the video ID you wish to return: ")
+                print(f"You have returned video ID: {video_id}")
+            elif choice == '2':
+                print("Displaying your rented videos...")
+            elif choice == '3':
+                print("Exiting the return menu.")
+            else:
+                print("Invalid choice. Please try again.")
+                return_video_menu()
+
+    return_video_menu()
 
 
 class customer():
