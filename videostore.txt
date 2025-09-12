@@ -1,0 +1,200 @@
+V001|The Shawshank Redemption|Drama|1994|FSK16
+V002|The Godfather|Crime|1972|FSK16
+V003|The Dark Knight|Action|2008|FSK12
+V004|The Godfather Part II|Crime|1974|FSK16
+V005|12 Angry Men|Drama|1957|FSK12
+V006|The Lord of the Rings: The Return of the King|Fantasy|2003|FSK12
+V007|Pulp Fiction|Crime|1994|FSK16
+V008|Schindler's List|History|1993|FSK12
+V009|The Lord of the Rings: The Fellowship of the Ring|Fantasy|2001|FSK12
+V010|The Good, the Bad and the Ugly|Western|1966|FSK12
+V011|Forrest Gump|Drama|1994|FSK12
+V012|Fight Club|Drama|1999|FSK16
+V013|Inception|Sci-Fi|2010|FSK12
+V014|The Lord of the Rings: The Two Towers|Fantasy|2002|FSK12
+V015|Star Wars: Episode V - The Empire Strikes Back|Sci-Fi|1980|FSK12
+V016|The Matrix|Sci-Fi|1999|FSK16
+V017|Goodfellas|Crime|1990|FSK16
+V018|One Flew Over the Cuckoo's Nest|Drama|1975|FSK12
+V019|Seven Samurai|Adventure|1954|FSK12
+V020|Se7en|Crime|1995|FSK16
+V021|It's a Wonderful Life|Drama|1946|FSK6
+V022|The Silence of the Lambs|Thriller|1991|FSK16
+V023|City of God|Crime|2002|FSK16
+V024|Saving Private Ryan|War|1998|FSK16
+V025|Interstellar|Sci-Fi|2014|FSK12
+V026|Life Is Beautiful|Comedy|1997|FSK12
+V027|The Green Mile|Fantasy|1999|FSK16
+V028|Star Wars: Episode IV - A New Hope|Sci-Fi|1977|FSK12
+V029|Terminator 2: Judgment Day|Action|1991|FSK16
+V030|Back to the Future|Adventure|1985|FSK12
+V031|Spirited Away|Animation|2001|FSK6
+V032|The Pianist|Drama|2002|FSK12
+V033|Psycho|Horror|1960|FSK16
+V034|Parasite|Thriller|2019|FSK16
+V035|Léon: The Professional|Crime|1994|FSK16
+V036|The Lion King|Animation|1994|FSK6
+V037|Gladiator|Action|2000|FSK16
+V038|American History X|Drama|1998|FSK16
+V039|The Departed|Crime|2006|FSK16
+V040|Whiplash|Drama|2014|FSK12
+V041|The Prestige|Drama|2006|FSK12
+V042|The Usual Suspects|Mystery|1995|FSK16
+V043|Casablanca|Romance|1942|FSK6
+V044|Harakiri|Drama|1962|FSK12
+V045|Grave of the Fireflies|Animation|1988|FSK12
+V046|The Intouchables|Comedy|2011|FSK12
+V047|Modern Times|Comedy|1936|FSK6
+V048|Once Upon a Time in the West|Western|1968|FSK16
+V049|Rear Window|Thriller|1954|FSK12
+V050|City Lights|Comedy|1931|FSK6
+V051|Apocalypse Now|War|1979|FSK16
+V052|Django Unchained|Western|2012|FSK16
+V053|WALL·E|Animation|2008|FSK0
+V054|The Shining|Horror|1980|FSK16
+V055|Avengers: Infinity War|Action|2018|FSK12
+V056|Princess Mononoke|Animation|1997|FSK12
+V057|Oldboy|Thriller|2003|FSK18
+V058|Joker|Crime|2019|FSK16
+V059|Once Upon a Time in America|Drama|1984|FSK16
+V060|Witness for the Prosecution|Mystery|1957|FSK12
+V061|Aliens|Sci-Fi|1986|FSK16
+V062|Your Name.|Animation|2016|FSK6
+V063|Das Boot|War|1981|FSK16
+V064|Braveheart|History|1995|FSK16
+V065|Toy Story|Animation|1995|FSK0
+V066|Amadeus|Biography|1984|FSK12
+V067|3 Idiots|Comedy|2009|FSK12
+V068|High and Low|Crime|1963|FSK12
+V069|Coco|Animation|2017|FSK0
+V070|Singin' in the Rain|Musical|1952|FSK6
+V071|Requiem for a Dream|Drama|2000|FSK16
+V072|Come and See|War|1985|FSK16
+V073|Toy Story 3|Animation|2010|FSK0
+V074|Good Will Hunting|Drama|1997|FSK12
+V075|Star Wars: Episode VI - Return of the Jedi|Sci-Fi|1983|FSK12
+V076|Eternal Sunshine of the Spotless Mind|Romance|2004|FSK12
+V077|2001: A Space Odyssey|Sci-Fi|1968|FSK12
+V078|Reservoir Dogs|Crime|1992|FSK16
+V079|Capernaum|Drama|2018|FSK12
+V080|Ikiru|Drama|1952|FSK6
+V081|The Hunt|Drama|2012|FSK12
+V082|Citizen Kane|Drama|1941|FSK6
+V083|Lawrence of Arabia|Adventure|1962|FSK12
+V084|Vertigo|Mystery|1958|FSK12
+V085|North by Northwest|Adventure|1959|FSK12
+V086|Amélie|Romance|2001|FSK6
+V087|Full Metal Jacket|War|1987|FSK16
+V088|Double Indemnity|Crime|1944|FSK12
+V089|A Clockwork Orange|Drama|1971|FSK18
+V090|Scarface|Crime|1983|FSK18
+V091|Taxi Driver|Drama|1976|FSK16
+V092|The Sting|Comedy|1973|FSK12
+V093|To Kill a Mockingbird|Drama|1962|FSK6
+V094|The Apartment|Romance|1960|FSK6
+V095|A Separation|Drama|2011|FSK12
+V096|Up|Animation|2009|FSK0
+V097|Raiders of the Lost Ark|Adventure|1981|FSK12
+V098|Metropolis|Sci-Fi|1927|FSK6
+V099|Heat|Crime|1995|FSK16
+V100|The Wolf of Wall Street|Drama|2013|FSK16
+V101|The Avengers|Action|2012|FSK12
+V102|Black Panther|Action|2018|FSK12
+V103|Frozen|Animation|2013|FSK0
+V104|Titanic|Romance|1997|FSK12
+V105|Avatar|Sci-Fi|2009|FSK12
+V106|The Incredibles|Animation|2004|FSK6
+V107|Finding Nemo|Animation|2003|FSK0
+V108|The Truman Show|Drama|1998|FSK12
+V109|Shrek|Animation|2001|FSK0
+V110|The Sound of Music|Musical|1965|FSK0
+V111|Rocky|Drama|1976|FSK12
+V112|The Sixth Sense|Thriller|1999|FSK12
+V113|The Great Dictator|Comedy|1940|FSK6
+V114|Doctor Zhivago|Romance|1965|FSK6
+V115|The Bridge on the River Kwai|War|1957|FSK12
+V116|Ben-Hur|History|1959|FSK12
+V117|Mad Max: Fury Road|Action|2015|FSK16
+V118|Guardians of the Galaxy|Sci-Fi|2014|FSK12
+V119|Iron Man|Action|2008|FSK12
+V120|Captain America: The Winter Soldier|Action|2014|FSK12
+V121|The Jungle Book|Animation|1967|FSK0
+V122|Zootopia|Animation|2016|FSK0
+V123|Moana|Animation|2016|FSK0
+V124|Frozen II|Animation|2019|FSK0
+V125|Aladdin|Animation|1992|FSK0
+V126|Beauty and the Beast|Animation|1991|FSK0
+V127|Mulan|Animation|1998|FSK6
+V128|The Little Mermaid|Animation|1989|FSK0
+V129|Sleeping Beauty|Animation|1959|FSK0
+V130|Snow White and the Seven Dwarfs|Animation|1937|FSK0
+V131|Bambi|Animation|1942|FSK0
+V132|Pinocchio|Animation|1940|FSK0
+V133|Cinderella|Animation|1950|FSK0
+V134|Tangled|Animation|2010|FSK0
+V135|Ratatouille|Animation|2007|FSK0
+V136|Inside Out|Animation|2015|FSK0
+V137|Soul|Animation|2020|FSK6
+V138|Luca|Animation|2021|FSK0
+V139|Encanto|Animation|2021|FSK0
+V140|Turning Red|Animation|2022|FSK6
+V141|Frozen Fever|Animation|2015|FSK0
+V142|The Polar Express|Animation|2004|FSK0
+V143|Kung Fu Panda|Animation|2008|FSK6
+V144|Kung Fu Panda 2|Animation|2011|FSK6
+V145|Kung Fu Panda 3|Animation|2016|FSK6
+V146|Despicable Me|Animation|2010|FSK0
+V147|Despicable Me 2|Animation|2013|FSK0
+V148|Despicable Me 3|Animation|2017|FSK0
+V149|Minions|Animation|2015|FSK0
+V150|Minions: The Rise of Gru|Animation|2022|FSK0
+V151|The Secret Life of Pets|Animation|2016|FSK0
+V152|Sing|Animation|2016|FSK0
+V153|Sing 2|Animation|2021|FSK0
+V154|Ice Age|Animation|2002|FSK0
+V155|Ice Age: The Meltdown|Animation|2006|FSK0
+V156|Ice Age: Dawn of the Dinosaurs|Animation|2009|FSK0
+V157|Ice Age: Continental Drift|Animation|2012|FSK0
+V158|Ice Age: Collision Course|Animation|2016|FSK0
+V159|Shrek 2|Animation|2004|FSK0
+V160|Shrek the Third|Animation|2007|FSK0
+V161|Shrek Forever After|Animation|2010|FSK0
+V162|Puss in Boots|Animation|2011|FSK6
+V163|Puss in Boots: The Last Wish|Animation|2022|FSK6
+V164|Megamind|Animation|2010|FSK6
+V165|Monsters, Inc.|Animation|2001|FSK0
+V166|Monsters University|Animation|2013|FSK0
+V167|A Bug's Life|Animation|1998|FSK0
+V168|Cars|Animation|2006|FSK0
+V169|Cars 2|Animation|2011|FSK6
+V170|Cars 3|Animation|2017|FSK6
+V171|Planes|Animation|2013|FSK0
+V172|Planes: Fire & Rescue|Animation|2014|FSK0
+V173|Wreck-It Ralph|Animation|2012|FSK0
+V174|Ralph Breaks the Internet|Animation|2018|FSK0
+V175|Big Hero 6|Animation|2014|FSK6
+V176|Brave|Animation|2012|FSK6
+V177|Frozen Sing-Along|Musical|2014|FSK0
+V178|Hercules|Animation|1997|FSK6
+V179|Tarzan|Animation|1999|FSK6
+V180|Atlantis: The Lost Empire|Animation|2001|FSK6
+V181|Treasure Planet|Animation|2002|FSK6
+V182|The Emperor's New Groove|Comedy|2000|FSK0
+V183|Brother Bear|Animation|2003|FSK0
+V184|Meet the Robinsons|Animation|2007|FSK0
+V185|Bolt|Animation|2008|FSK0
+V186|Chicken Little|Animation|2005|FSK0
+V187|Oliver & Company|Animation|1988|FSK0
+V188|The Rescuers|Animation|1977|FSK0
+V189|The Rescuers Down Under|Animation|1990|FSK0
+V190|The Fox and the Hound|Animation|1981|FSK0
+V191|The Fox and the Hound 2|Animation|2006|FSK0
+V192|Lady and the Tramp|Romance|1955|FSK0
+V193|Lady and the Tramp II: Scamp's Adventure|Romance|2001|FSK0
+V194|Peter Pan|Fantasy|1953|FSK0
+V195|Peter Pan: Return to Neverland|Fantasy|2002|FSK0
+V196|Dumbo|Animation|1941|FSK0
+V197|The Aristocats|Animation|1970|FSK0
+V198|101 Dalmatians|Animation|1961|FSK0
+V199|101 Dalmatians II: Patch's London Adventure|Animation|2003|FSK0
+V200|Cruella|Drama|2021|FSK12
