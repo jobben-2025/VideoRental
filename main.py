@@ -13,16 +13,18 @@
 
 ######################### CLASSES #########################
 class Video:
-    def __init__(self, video_id: str, title: str, genre: str, year: int, available: bool = True):
+    def __init__(self, video_id: str, title: str, genre: str, year: int, fsk: str = "FSK0", available: bool = True):
         self.video_id = video_id
         self.title = title
         self.genre = genre
         self.year = year
+        self.fsk = fsk.upper()  # e.g., FSK12
         self.available = available
         # (Single source of truth is VideoStore; no class-level registries)
 
     def __str__(self):
-        return f"{self.video_id} | {self.title} ({self.year}) [{self.genre}] - {'Available' if self.available else 'Not Available'}"
+        status = "Available" if self.available else "Not Available"
+        return f"{self.video_id} | {self.title} ({self.year}) [{self.genre}, {self.fsk}] - {status}"
 
     def check_availability(self) -> str:
         return f"{self.title} is {'available' if self.available else 'not available'}."
@@ -47,9 +49,7 @@ class Customer:
 
 
 class VideoStore:
-    """
-    Minimal list-based store for videos and customers.
-    """
+    """Minimal list-based store for videos and customers."""
     def __init__(self, videos=None, customers=None):
         self.videos = videos if videos is not None else []
         self.customers = customers if customers is not None else []
@@ -58,7 +58,7 @@ class VideoStore:
         if not all(isinstance(c, Customer) for c in self.customers):
             raise TypeError("All elements of 'customers' must be instances of Customer.")
 
-    # ---------- ID helpers (NEW) ----------
+    # ---------- ID helpers ----------
     def next_video_id(self) -> str:
         """Return the next ID like V001, V002, ... based on current store content."""
         nums = []
@@ -76,7 +76,7 @@ class VideoStore:
                 nums.append(int(c.customer_id[1:]))
         nxt = (max(nums) + 1) if nums else 1
         return f"C{nxt:03d}"
-    # -------------------------------------
+    # ---------------------------------
 
     def add_video(self, video):
         if not isinstance(video, Video):
@@ -139,9 +139,8 @@ class VideoStore:
         id_set = set(customer.rented_videos)
         return [v for v in self.videos if v.video_id in id_set]
 
-    # --- stretch: search ---
+    # --- search ---
     def search(self, title: str = "", genre: str = ""):
-        """Search by title (substring, case-insensitive) and/or genre (exact, case-insensitive)."""
         t = title.strip().lower()
         g = genre.strip().lower()
         results = []
@@ -154,38 +153,34 @@ class VideoStore:
 
 
 #######################################################################
-###### Code Text File Save  ###########################################
+###### File IO (save/load) ###########################################
 #######################################################################
 # Files:
-#   videostore.txt -> video_id|title|genre|year
+#   videostore.txt -> video_id|title|genre|year|FSKxx
 #   customers.txt  -> customer_id|name
 import os
+from pathlib import Path
 
-VIDEO_FILE = "videostore.txt"
-CUSTOMER_FILE = "customers.txt"
+# robust file paths: always next to this script
+BASE_DIR = Path(__file__).resolve().parent
+VIDEO_FILE = BASE_DIR / "videostore.txt"
+CUSTOMER_FILE = BASE_DIR / "customers.txt"
 
-def _append_line(path: str, line: str):
-    """
-    Append a line to 'path'. If the file exists and its last byte is not a newline,
-    write a newline first so new entries don't stick to the previous line.
-    """
-    # open for read+append so we can check the last byte
+def _append_line(path: Path, line: str):
+    """Append a line ensuring a newline between records."""
     with open(path, "a+", encoding="utf-8") as f:
         f.seek(0, os.SEEK_END)
         size = f.tell()
         if size > 0:
-            # read last byte
             f.seek(size - 1)
-            last = f.read(1)
-            if last != "\n":
+            if f.read(1) != "\n":
                 f.write("\n")
-        # ensure exactly one newline is appended
         if not line.endswith("\n"):
             line += "\n"
         f.write(line)
 
 def save_video_to_file(video: Video):
-    line = f"{video.video_id}|{video.title}|{video.genre}|{video.year}"
+    line = f"{video.video_id}|{video.title}|{video.genre}|{video.year}|{video.fsk}"
     _append_line(VIDEO_FILE, line)
 
 def save_customer_to_file(customer: Customer):
@@ -194,28 +189,43 @@ def save_customer_to_file(customer: Customer):
 
 def load_videos_from_file():
     videos = []
-    if not os.path.exists(VIDEO_FILE):
+    if not VIDEO_FILE.exists():
         return videos
     with open(VIDEO_FILE, "r", encoding="utf-8") as f:
-        for line in f:
-            parts = line.strip().split("|")
-            if len(parts) != 4:
+        for raw in f:
+            line = raw.strip()
+            if not line or line.startswith("#"):
                 continue
-            video_id, title, genre, year_str = parts
+            parts = [p.strip() for p in line.split("|")]
+            # allow header row
+            if len(parts) >= 1 and parts[0].lower() == "video_id":
+                continue
+            if len(parts) == 5:
+                video_id, title, genre, year_str, fsk = parts
+            elif len(parts) == 4:  # legacy without FSK; default to FSK0
+                video_id, title, genre, year_str = parts
+                fsk = "FSK0"
+            else:
+                continue
             try:
                 year = int(year_str)
             except ValueError:
                 year = 0
-            videos.append(Video(video_id, title, genre, year, available=True))
+            videos.append(Video(video_id, title, genre, year, fsk=fsk, available=True))
     return videos
 
 def load_customers_from_file():
     customers = []
-    if not os.path.exists(CUSTOMER_FILE):
+    if not CUSTOMER_FILE.exists():
         return customers
     with open(CUSTOMER_FILE, "r", encoding="utf-8") as f:
-        for line in f:
-            parts = line.strip().split("|")
+        for raw in f:
+            line = raw.strip()
+            if not line or line.startswith("#"):
+                continue
+            parts = [p.strip() for p in line.split("|")]
+            if len(parts) >= 1 and parts[0].lower() == "customer_id":
+                continue
             if len(parts) != 2:
                 continue
             customer_id, name = parts
@@ -223,12 +233,26 @@ def load_customers_from_file():
     return customers
 
 
+######################### STARTUP INIT #########################
+VideoCollection1 = None
+
+def init_store_from_files():
+    """Load inventory (videos, customers) from the two .txt files once at startup."""
+    global VideoCollection1
+    vids = load_videos_from_file()
+    custs = load_customers_from_file()
+    VideoCollection1 = VideoStore(videos=vids, customers=custs)
+
+
 ######################### FUNCTIONS (CLI) #########################
-# Initialize store from files
-VideoCollection1 = VideoStore(
-    videos=load_videos_from_file(),
-    customers=load_customers_from_file()
-)
+def _ask_fsk() -> str:
+    """Prompt for FSK and return a normalized value like 'FSK12'."""
+    valid = {"0", "6", "12", "16", "18", "FSK0", "FSK6", "FSK12", "FSK16", "FSK18"}
+    while True:
+        raw = input("FSK (0/6/12/16/18): ").strip().upper().replace(" ", "")
+        if raw in valid:
+            return raw if raw.startswith("FSK") else f"FSK{raw}"
+        print("❌ Invalid FSK. Please use 0, 6, 12, 16, or 18.")
 
 def first_add_video():
     print("\n1. Add a video to system\n")
@@ -259,10 +283,12 @@ def first_add_video():
         print("❌ Year must be a number.")
         return
 
+    fsk = _ask_fsk()
+
     try:
-        new_video = Video(new_video_id, title, genre, year, available=True)
+        new_video = Video(new_video_id, title, genre, year, fsk=fsk, available=True)
         VideoCollection1.add_video(new_video)
-        save_video_to_file(new_video)  # persists, with safe newline handling
+        save_video_to_file(new_video)
         print("✅ Video added and saved to videostore.txt.")
     except (TypeError, ValueError) as e:
         print(f"❌ {e}")
@@ -287,7 +313,7 @@ def second_add_customer():
     try:
         new_customer = Customer(new_customer_id, new_customer_name)
         VideoCollection1.add_customer(new_customer)
-        save_customer_to_file(new_customer)  # persists, with safe newline handling
+        save_customer_to_file(new_customer)
         print("✅ Customer added and saved to customers.txt.")
     except (TypeError, ValueError) as e:
         print(f"❌ {e}")
@@ -436,4 +462,5 @@ def main_menu():
 ######################### ENTRYPOINT #########################
 if __name__ == "__main__":
     # Load from files on startup
+    init_store_from_files()
     main_menu()
