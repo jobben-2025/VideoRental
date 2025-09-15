@@ -1,6 +1,16 @@
 # Main project file
 # Video Rental System
 
+# 🎯 Goal
+# Students will build a console-based system for renting movies, returning them, and managing members.
+
+# 🔑 Learning Focus
+# Classes: Video, Customer, VideoStore
+# Functions: rent, return, search, list
+# Collections: use of dict and list for efficient management
+
+# 🗓️ Weekly Breakdown etc. (omitted for brevity)
+
 ######################### CLASSES #########################
 class Video:
     def __init__(self, video_id: str, title: str, genre: str, year: int, fsk: str = "FSK0", available: bool = True):
@@ -50,6 +60,7 @@ class VideoStore:
 
     # ---------- ID helpers ----------
     def next_video_id(self) -> str:
+        """Return the next ID like V001, V002, ... based on current store content."""
         nums = []
         for v in self.videos:
             if isinstance(v.video_id, str) and len(v.video_id) >= 2 and v.video_id[0] == "V" and v.video_id[1:].isdigit():
@@ -58,6 +69,7 @@ class VideoStore:
         return f"V{nxt:03d}"
 
     def next_customer_id(self) -> str:
+        """Return the next ID like C001, C002, ... based on current store content."""
         nums = []
         for c in self.customers:
             if isinstance(c.customer_id, str) and len(c.customer_id) >= 2 and c.customer_id[0] == "C" and c.customer_id[1:].isdigit():
@@ -111,7 +123,7 @@ class VideoStore:
         if customer is None or video is None:
             return False
         if video_id not in customer.rented_videos:
-            return False
+            return False  # customer didn't rent this video
         video.available = True
         customer.return_video(video_id)
         return True
@@ -235,7 +247,7 @@ def init_store_from_files():
 ######################### FUNCTIONS (CLI) #########################
 def _ask_fsk() -> str:
     """Prompt for FSK and return a normalized value like 'FSK12'."""
-    valid = {"0","6","12","16","18","FSK0","FSK6","FSK12","FSK16","FSK18"}
+    valid = {"0", "6", "12", "16", "18", "FSK0", "FSK6", "FSK12", "FSK16", "FSK18"}
     while True:
         raw = input("FSK (0/6/12/16/18): ").strip().upper().replace(" ", "")
         if raw in valid:
@@ -246,6 +258,7 @@ def first_add_video():
     print("\n1. Add a video to system\n")
     global VideoCollection1
 
+    # ID: optional input; if empty we generate the next one
     typed_id = input("Video ID (leave empty to auto-generate): ").strip()
     if typed_id == "":
         new_video_id = VideoCollection1.next_video_id()
@@ -284,6 +297,7 @@ def second_add_customer():
     print("\n2. Add a customer to system\n")
     global VideoCollection1
 
+    # ID: optional input; if empty we generate the next one
     typed_id = input("Customer ID (leave empty to auto-generate): ").strip()
     if typed_id == "":
         new_customer_id = VideoCollection1.next_customer_id()
